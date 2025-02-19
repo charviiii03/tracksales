@@ -7,8 +7,12 @@ customers = Blueprint('customers', __name__)
 @customers.route('/customers')
 @login_required
 def list_customers():
+    search = request.args.get('search', '')
     with get_db_cursor() as cursor:
-        cursor.execute('SELECT * FROM customers ORDER BY name')
+        if search:
+            cursor.execute('SELECT * FROM customers WHERE name LIKE %s ORDER BY name', (f'%{search}%',))
+        else:
+            cursor.execute('SELECT * FROM customers ORDER BY name')
         customers = cursor.fetchall()
     return render_template('customers/list.html', customers=customers)
 

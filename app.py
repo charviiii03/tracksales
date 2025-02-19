@@ -78,9 +78,14 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    selected_date = request.args.get('date')
+    
     with get_db_cursor() as cursor:
         # Get total sales count
-        cursor.execute('SELECT COUNT(*) as count FROM sales')
+        if selected_date:
+            cursor.execute('SELECT COUNT(*) as count FROM sales WHERE DATE(sale_date) = %s', (selected_date,))
+        else:
+            cursor.execute('SELECT COUNT(*) as count FROM sales')
         total_sales = cursor.fetchone()['count']
         
         # Get total customers
@@ -91,21 +96,33 @@ def dashboard():
         cursor.execute('SELECT COUNT(*) as count FROM products')
         total_products = cursor.fetchone()['count']
         
-        # Get today's sales
-        cursor.execute('SELECT COALESCE(SUM(total_amount), 0) as total FROM sales WHERE DATE(sale_date) = CURDATE()')
+        # Get sales total for selected date or today
+        if selected_date:
+            cursor.execute('SELECT COALESCE(SUM(total_amount), 0) as total FROM sales WHERE DATE(sale_date) = %s', (selected_date,))
+        else:
+            cursor.execute('SELECT COALESCE(SUM(total_amount), 0) as total FROM sales WHERE DATE(sale_date) = CURDATE()')
         today_sales = cursor.fetchone()['total']
         
         # Get recent sales
-        cursor.execute('''
-            SELECT s.id, c.name as customer_name, s.total_amount, s.sale_date 
-            FROM sales s 
-            JOIN customers c ON s.customer_id = c.id 
-            ORDER BY s.sale_date DESC LIMIT 5
-        ''')
+        if selected_date:
+            cursor.execute("""
+                SELECT s.id, c.name as customer_name, s.total_amount, s.sale_date 
+                FROM sales s 
+                JOIN customers c ON s.customer_id = c.id 
+                WHERE DATE(s.sale_date) = %s
+                ORDER BY s.sale_date DESC LIMIT 5
+            """, (selected_date,))
+        else:
+            cursor.execute("""
+                SELECT s.id, c.name as customer_name, s.total_amount, s.sale_date 
+                FROM sales s 
+                JOIN customers c ON s.customer_id = c.id 
+                ORDER BY s.sale_date DESC LIMIT 5
+            """)
         recent_sales = cursor.fetchall()
         
-        # Get low stock products (less than 10 items)
-        cursor.execute('SELECT * FROM products WHERE stock < 10 ORDER BY stock ASC LIMIT 5')
+        # Get low stock products (where stock is below their individual threshold)
+        cursor.execute('SELECT * FROM products WHERE stock < low_stock_threshold ORDER BY stock ASC LIMIT 5')
         low_stock_products = cursor.fetchall()
     
     return render_template('dashboard.html',

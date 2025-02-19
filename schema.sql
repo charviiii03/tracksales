@@ -22,10 +22,11 @@ CREATE TABLE customers (
 -- Products table for inventory management
 CREATE TABLE products (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     description TEXT,
-    price DECIMAL(10,2) NOT NULL,
-    stock INT NOT NULL
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    low_stock_threshold INT NOT NULL DEFAULT 10
 );
 
 -- Sales table for tracking sales transactions

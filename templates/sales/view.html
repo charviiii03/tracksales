@@ -13,7 +13,7 @@
                     <h6>Customer Information</h6>
                     <p class="mb-1"><strong>Customer:</strong> {{ sale.customer_name }}</p>
                     <p class="mb-1"><strong>Sale Date:</strong> {{ sale.sale_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <p class="mb-1"><strong>Total Amount:</strong> ${{ "%.2f"|format(sale.total_amount) }}</p>
+                    <p class="mb-1"><strong>Total Amount:</strong> ₹{{ "%.2f"|format(sale.total_amount) }}</p>
                 </div>
             </div>
 
@@ -33,8 +33,8 @@
                         <tr>
                             <td>{{ item.product_name }}</td>
                             <td>{{ item.quantity }}</td>
-                            <td>${{ "%.2f"|format(item.price) }}</td>
-                            <td>${{ "%.2f"|format(item.quantity * item.price) }}</td>
+                            <td>₹{{ "%.2f"|format(item.price) }}</td>
+                            <td>₹{{ "%.2f"|format(item.quantity * item.price) }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

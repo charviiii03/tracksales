@@ -32,6 +32,11 @@
                     <label for="stock" class="form-label">Stock</label>
                     <input type="number" class="form-control" id="stock" name="stock" value="{{ product.stock if product else '' }}" required>
                 </div>
+                <div class="mb-3">
+                    <label for="low_stock_threshold" class="form-label">Low Stock Threshold</label>
+                    <input type="number" class="form-control" id="low_stock_threshold" name="low_stock_threshold" value="{{ product.low_stock_threshold if product else '' }}" required>
+                    <small class="form-text text-muted">Set the quantity at which you want to receive low stock alerts.</small>
+                </div>
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">{{ 'Update' if product else 'Create' }} Product</button>
                     <a href="{{ url_for('products.list_products') }}" class="btn btn-secondary">Cancel</a>

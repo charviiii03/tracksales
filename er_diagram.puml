@@ -1,53 +1,65 @@
-@startuml Sales Tracking System ER Diagram
+@startuml Sales Management System ER Diagram
 
 skinparam linetype ortho
-
-entity "users" {
-  *id: INT <<PK>>
-  --
-  username: VARCHAR
-  password_hash: VARCHAR
-  role: VARCHAR
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2563eb
+    BorderColor #1e40af
 }
 
-entity "customers" {
-  *id: INT <<PK>>
-  --
-  name: VARCHAR
-  email: VARCHAR
-  phone: VARCHAR
-  address: VARCHAR
+entity "users" as users {
+    *id: INTEGER <<PK>>
+    --
+    *username: VARCHAR
+    *password_hash: VARCHAR
+    *role: ENUM('admin', 'salesperson')
+    created_at: TIMESTAMP
 }
 
-entity "products" {
-  *id: INT <<PK>>
-  --
-  name: VARCHAR
-  description: TEXT
-  price: DECIMAL
-  stock: INT
+entity "customers" as customers {
+    *id: INTEGER <<PK>>
+    --
+    *name: VARCHAR
+    email: VARCHAR
+    phone: VARCHAR
+    address: TEXT
+    created_at: TIMESTAMP
 }
 
-entity "sales" {
-  *id: INT <<PK>>
-  --
-  *customer_id: INT <<FK>>
-  *user_id: INT <<FK>>
-  sale_date: DATETIME
-  total_amount: DECIMAL
+entity "products" as products {
+    *id: INTEGER <<PK>>
+    --
+    *name: VARCHAR
+    description: TEXT
+    *price: DECIMAL
+    *stock: INTEGER
+    *low_stock_threshold: INTEGER
+    created_at: TIMESTAMP
 }
 
-entity "sale_items" {
-  *sale_id: INT <<FK>>
-  *product_id: INT <<FK>>
-  --
-  quantity: INT
-  price: DECIMAL
+entity "sales" as sales {
+    *id: INTEGER <<PK>>
+    --
+    *customer_id: INTEGER <<FK>>
+    *user_id: INTEGER <<FK>>
+    *total_amount: DECIMAL
+    *sale_date: TIMESTAMP
+    created_at: TIMESTAMP
 }
 
-users ||--o{ sales
-customers ||--o{ sales
-sales ||--|{ sale_items
-products ||--o{ sale_items
+entity "sale_items" as sale_items {
+    *id: INTEGER <<PK>>
+    --
+    *sale_id: INTEGER <<FK>>
+    *product_id: INTEGER <<FK>>
+    *quantity: INTEGER
+    *price: DECIMAL
+    created_at: TIMESTAMP
+}
+
+sales }|--|| customers : belongs to
+sales }|--|| users : created by
+sale_items }|--|| sales : belongs to
+sale_items }|--|| products : contains
 
 @enduml

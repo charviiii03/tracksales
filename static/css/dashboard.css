@@ -1,0 +1,104 @@
+/* Dashboard specific styles */
+.dashboard-card {
+    transition: transform 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card .card-body {
+    padding: 1.5rem;
+}
+
+.dashboard-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card .card-text {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.dashboard-card i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Custom gradients for cards */
+.bg-primary {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #4CAF50, #388E3C) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #00BCD4, #0097A7) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #FFC107, #FFA000) !important;
+}
+
+/* Table styles */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Badge styles */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+/* Date picker styles */
+input[type="date"] {
+    border-radius: 6px;
+}
+
+/* Card headers */
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.card-header h5 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-card .card-text {
+        font-size: 1.5rem;
+    }
+    
+    .dashboard-card i {
+        font-size: 1.2rem;
+    }
+}

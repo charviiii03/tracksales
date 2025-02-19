@@ -8,13 +8,26 @@ sales = Blueprint('sales', __name__)
 @sales.route('/sales')
 @login_required
 def list_sales():
+    sale_date = request.args.get('sale_date')
+    
     with get_db_cursor() as cursor:
-        cursor.execute("""
-            SELECT s.id, c.name as customer_name, s.sale_date, s.total_amount
-            FROM sales s
-            JOIN customers c ON s.customer_id = c.id
-            ORDER BY s.sale_date DESC
-        """)
+        if sale_date:
+            cursor.execute("""
+                SELECT s.id, c.name as customer_name, s.sale_date, s.total_amount, u.username as created_by
+                FROM sales s
+                JOIN customers c ON s.customer_id = c.id
+                JOIN users u ON s.user_id = u.id
+                WHERE DATE(s.sale_date) = %s
+                ORDER BY s.sale_date DESC
+            """, (sale_date,))
+        else:
+            cursor.execute("""
+                SELECT s.id, c.name as customer_name, s.sale_date, s.total_amount, u.username as created_by
+                FROM sales s
+                JOIN customers c ON s.customer_id = c.id
+                JOIN users u ON s.user_id = u.id
+                ORDER BY s.sale_date DESC
+            """)
         sales = cursor.fetchall()
     return render_template('sales/list.html', sales=sales)
 
@@ -25,7 +38,7 @@ def create_sale():
         customer_id = request.form['customer_id']
         products = request.form.getlist('product_id[]')
         quantities = request.form.getlist('quantity[]')
-        sale_date = datetime.now()
+        sale_date = datetime.strptime(request.form['sale_date'], '%Y-%m-%dT%H:%M')
 
         with get_db_cursor() as cursor:
             try:
@@ -116,8 +129,8 @@ def view_sale(id):
 @sales.route('/sales/<int:id>/delete', methods=['POST'])
 @login_required
 def delete_sale(id):
-    if current_user.role != 'admin':
-        flash('Only administrators can delete sales.', 'danger')
+    if current_user.username != 'pravit':
+        flash('Only user pravit can delete sales.', 'danger')
         return redirect(url_for('sales.list_sales'))
 
     with get_db_cursor() as cursor:

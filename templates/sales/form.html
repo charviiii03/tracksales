@@ -11,6 +11,10 @@
                 <div class="card-body">
                     <form method="POST" id="saleForm">
                         <div class="mb-3">
+                            <label for="sale_date" class="form-label">Sale Date</label>
+                            <input type="datetime-local" class="form-control" id="sale_date" name="sale_date" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="customer_id" class="form-label">Customer</label>
                             <select class="form-select" id="customer_id" name="customer_id" required>
                                 <option value="">Select Customer</option>
@@ -35,6 +39,9 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Quantity</label>
                                         <input type="number" class="form-control" name="quantity[]" min="1" required>
+                                        <div class="invalid-feedback stock-warning" style="display: none;">
+                                            Warning: Quantity exceeds available stock!
+                                        </div>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
                                         <button type="button" class="btn btn-danger remove-product" style="display: none;">Remove</button>
@@ -88,12 +95,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const select = row.querySelector('select');
             const quantity = row.querySelector('input[type="number"]');
             const option = select.selectedOptions[0];
+            const warning = row.querySelector('.stock-warning');
 
             if (option && option.dataset.stock) {
                 const maxStock = parseInt(option.dataset.stock);
                 quantity.max = maxStock;
                 if (parseInt(quantity.value) > maxStock) {
-                    quantity.value = maxStock;
+                    warning.style.display = 'block';
+                    quantity.classList.add('is-invalid');
+                } else {
+                    warning.style.display = 'none';
+                    quantity.classList.remove('is-invalid');
                 }
             }
         }

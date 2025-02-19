@@ -7,6 +7,15 @@
         <a href="{{ url_for('customers.create_customer') }}" class="btn btn-primary">Add New Customer</a>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Search by name..." value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
