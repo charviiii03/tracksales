@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Create New Sale</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="saleForm">
+                        <div class="mb-3">
+                            <label for="customer_id" class="form-label">Customer</label>
+                            <select class="form-select" id="customer_id" name="customer_id" required>
+                                <option value="">Select Customer</option>
+                                {% for customer in customers %}
+                                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div id="productList">
+                            <div class="product-item mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Product</label>
+                                        <select class="form-select" name="product_id[]" required>
+                                            <option value="">Select Product</option>
+                                            {% for product in products %}
+                                            <option value="{{ product.id }}" data-price="{{ product.price }}" data-stock="{{ product.stock }}">{{ product.name }} (Stock: {{ product.stock }})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" name="quantity[]" min="1" required>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger remove-product" style="display: none;">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-secondary" id="addProduct">Add Another Product</button>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('sales.list_sales') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create Sale</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productList = document.getElementById('productList');
+    const addProductBtn = document.getElementById('addProduct');
+    const firstProduct = productList.querySelector('.product-item');
+
+    addProductBtn.addEventListener('click', function() {
+        const newProduct = firstProduct.cloneNode(true);
+        const removeBtn = newProduct.querySelector('.remove-product');
+        removeBtn.style.display = 'block';
+        
+        // Clear selected values
+        newProduct.querySelector('select').value = '';
+        newProduct.querySelector('input[type="number"]').value = '';
+
+        // Add remove functionality
+        removeBtn.addEventListener('click', function() {
+            newProduct.remove();
+        });
+
+        productList.appendChild(newProduct);
+    });
+
+    // Validate stock when quantity changes
+    productList.addEventListener('change', function(e) {
+        if (e.target.matches('select[name="product_id[]"]') || e.target.matches('input[name="quantity[]"]')) {
+            const row = e.target.closest('.product-item');
+            const select = row.querySelector('select');
+            const quantity = row.querySelector('input[type="number"]');
+            const option = select.selectedOptions[0];
+
+            if (option && option.dataset.stock) {
+                const maxStock = parseInt(option.dataset.stock);
+                quantity.max = maxStock;
+                if (parseInt(quantity.value) > maxStock) {
+                    quantity.value = maxStock;
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

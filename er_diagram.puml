@@ -1,0 +1,53 @@
+@startuml Sales Tracking System ER Diagram
+
+skinparam linetype ortho
+
+entity "users" {
+  *id: INT <<PK>>
+  --
+  username: VARCHAR
+  password_hash: VARCHAR
+  role: VARCHAR
+}
+
+entity "customers" {
+  *id: INT <<PK>>
+  --
+  name: VARCHAR
+  email: VARCHAR
+  phone: VARCHAR
+  address: VARCHAR
+}
+
+entity "products" {
+  *id: INT <<PK>>
+  --
+  name: VARCHAR
+  description: TEXT
+  price: DECIMAL
+  stock: INT
+}
+
+entity "sales" {
+  *id: INT <<PK>>
+  --
+  *customer_id: INT <<FK>>
+  *user_id: INT <<FK>>
+  sale_date: DATETIME
+  total_amount: DECIMAL
+}
+
+entity "sale_items" {
+  *sale_id: INT <<FK>>
+  *product_id: INT <<FK>>
+  --
+  quantity: INT
+  price: DECIMAL
+}
+
+users ||--o{ sales
+customers ||--o{ sales
+sales ||--|{ sale_items
+products ||--o{ sale_items
+
+@enduml
