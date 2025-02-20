@@ -9,6 +9,7 @@ sales = Blueprint('sales', __name__)
 @login_required
 def list_sales():
     sale_date = request.args.get('sale_date')
+    search = request.args.get('search', '')
     
     with get_db_cursor() as cursor:
         if sale_date:
@@ -17,19 +18,20 @@ def list_sales():
                 FROM sales s
                 JOIN customers c ON s.customer_id = c.id
                 JOIN users u ON s.user_id = u.id
-                WHERE DATE(s.sale_date) = %s
+                WHERE DATE(s.sale_date) = %s AND c.name LIKE %s
                 ORDER BY s.sale_date DESC
-            """, (sale_date,))
+            """, (sale_date, f'%{search}%'))
         else:
             cursor.execute("""
                 SELECT s.id, c.name as customer_name, s.sale_date, s.total_amount, u.username as created_by
                 FROM sales s
                 JOIN customers c ON s.customer_id = c.id
                 JOIN users u ON s.user_id = u.id
+                WHERE c.name LIKE %s
                 ORDER BY s.sale_date DESC
-            """)
+            """, (f'%{search}%',))
         sales = cursor.fetchall()
-    return render_template('sales/list.html', sales=sales)
+    return render_template('sales/list.html', sales=sales, search=search)
 
 @sales.route('/sales/create', methods=['GET', 'POST'])
 @login_required
@@ -129,8 +131,8 @@ def view_sale(id):
 @sales.route('/sales/<int:id>/delete', methods=['POST'])
 @login_required
 def delete_sale(id):
-    if current_user.username != 'pravit':
-        flash('Only user pravit can delete sales.', 'danger')
+    if current_user.role!= 'admin':
+        flash('Only user administer can delete sales.', 'danger')
         return redirect(url_for('sales.list_sales'))
 
     with get_db_cursor() as cursor:
@@ -147,7 +149,7 @@ def delete_sale(id):
                             (item['quantity'], item['product_id']))
 
             # Delete sale items and sale
-            cursor.execute('DELETE FROM sale_items WHERE sale_id = %s', (id,))
+            cursor.execute('DELETE FROM sales_items WHERE sale_id = %s', (id,))
             cursor.execute('DELETE FROM sales WHERE id = %s', (id,))
 
             cursor.execute('COMMIT')

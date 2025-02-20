@@ -27,12 +27,12 @@ INSERT INTO sales (customer_id, user_id, total_amount, sale_date) VALUES
 
 -- Insert sample sales items
 INSERT INTO sales_items (sale_id, product_id, quantity, price) VALUES
-(1, 1, 1, 1299.99),
-(1, 4, 2, 149.99),
+(2, 1, 1, 1299.99),
+(2, 4, 2, 149.99),
 (2, 2, 1, 799.99),
 (2, 7, 2, 19.99),
-(3, 1, 1, 1299.99),
-(3, 8, 1, 59.99),
-(4, 4, 2, 149.99),
+(5, 1, 1, 1299.99),
+(5, 8, 1, 59.99),
+(5, 4, 2, 149.99),
 (5, 5, 2, 249.99),
-(5, 6, 1, 49.99);
+(6, 6, 1, 49.99);

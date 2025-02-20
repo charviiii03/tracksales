@@ -11,11 +11,11 @@
                 <div class="card-body">
                     <form method="POST" id="saleForm">
                         <div class="mb-3">
-                            <label for="sale_date" class="form-label">Sale Date</label>
+                            <label for="sale_date" class="form-label required-field">Sale Date</label>
                             <input type="datetime-local" class="form-control" id="sale_date" name="sale_date" required>
                         </div>
                         <div class="mb-3">
-                            <label for="customer_id" class="form-label">Customer</label>
+                            <label for="customer_id" class="form-label required-field">Customer</label>
                             <select class="form-select" id="customer_id" name="customer_id" required>
                                 <option value="">Select Customer</option>
                                 {% for customer in customers %}
@@ -28,7 +28,7 @@
                             <div class="product-item mb-3">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label class="form-label">Product</label>
+                                        <label class="form-label required-field">Product</label>
                                         <select class="form-select" name="product_id[]" required>
                                             <option value="">Select Product</option>
                                             {% for product in products %}
@@ -37,7 +37,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Quantity</label>
+                                        <label class="form-label required-field">Quantity</label>
                                         <input type="number" class="form-control" name="quantity[]" min="1" required>
                                         <div class="invalid-feedback stock-warning" style="display: none;">
                                             Warning: Quantity exceeds available stock!

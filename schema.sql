@@ -51,6 +51,6 @@ CREATE TABLE sales_items (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
--- Insert a default admin user (password: admin123)
+-- Insert a default admin user (password: pravit)
 INSERT INTO users (username, password_hash, role)
-VALUES ('admin', '$5$rounds=535000$CyEQBZMZ8PtZ4Ypg$AZVhf4B8M0YVtxbVYBWFRVTBg1PCYELJJXqLEMhkID4', 'admin');
+VALUES ('admin', ' $5$rounds=535000$2.G7A8Bafh5fPD./$vUA9XB6kO0O2VYpkHBbFteGk4MDndThwiV3nsIQ4567 ', 'admin');

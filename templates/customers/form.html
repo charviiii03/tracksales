@@ -11,19 +11,19 @@
                 <div class="card-body">
                     <form method="POST">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
+                            <label for="name" class="form-label required-field">Name</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ customer.name if customer else '' }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label required-field">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ customer.email if customer else '' }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone</label>
+                            <label for="phone" class="form-label required-field">Phone</label>
                             <input type="tel" class="form-control" id="phone" name="phone" value="{{ customer.phone if customer else '' }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
+                            <label for="address" class="form-label required-field">Address</label>
                             <textarea class="form-control" id="address" name="address" rows="3" required>{{ customer.address if customer else '' }}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">

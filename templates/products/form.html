@@ -17,7 +17,7 @@
 
             <form method="POST">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Product Name</label>
+                    <label for="name" class="form-label required-field">Product Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ product.name if product else '' }}" required>
                 </div>
                 <div class="mb-3">
@@ -25,15 +25,15 @@
                     <textarea class="form-control" id="description" name="description" rows="3">{{ product.description if product else '' }}</textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
+                    <label for="price" class="form-label required-field">Price</label>
                     <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ product.price if product else '' }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="stock" class="form-label">Stock</label>
+                    <label for="stock" class="form-label required-field">Stock</label>
                     <input type="number" class="form-control" id="stock" name="stock" value="{{ product.stock if product else '' }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="low_stock_threshold" class="form-label">Low Stock Threshold</label>
+                    <label for="low_stock_threshold" class="form-label required-field">Low Stock Threshold</label>
                     <input type="number" class="form-control" id="low_stock_threshold" name="low_stock_threshold" value="{{ product.low_stock_threshold if product else '' }}" required>
                     <small class="form-text text-muted">Set the quantity at which you want to receive low stock alerts.</small>
                 </div>

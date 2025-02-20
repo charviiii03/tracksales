@@ -58,7 +58,7 @@ def edit_customer(id):
 @login_required
 def delete_customer(id):
     if current_user.role != 'admin':
-        flash('Only administrators can delete customers.', 'danger')
+        flash('Only administrator can delete customers.', 'danger')
         return redirect(url_for('customers.list_customers'))
 
     with get_db_cursor() as cursor:
